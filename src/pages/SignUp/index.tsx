@@ -4,7 +4,7 @@ import { FiMail, FiLock, FiLogOut } from 'react-icons/fi';
 import * as yup from 'yup';
 
 import Input from '../../components/Input';
-import Logo from '../../assets/Logo.png';
+import Logo from '../../assets/logo.png';
 import getValidatorErros from '../../utils/getValidatorErros';
 import { useToast } from '../../Hooks/ToastContext';
 
