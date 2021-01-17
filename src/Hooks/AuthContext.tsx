@@ -13,8 +13,8 @@ interface UserProps {
 }
 
 interface AuthContextProps {
-  user: UserProps;
-  token: string;
+  user: UserProps | undefined;
+  token: string | undefined;
   login: (data: LoginRequest) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -27,15 +27,18 @@ const AuthProvider: React.FC = ({ children }) => {
     if (response) {
       return JSON.parse(response);
     }
-    return {} as UserProps;
+    return undefined;
   });
 
   const [token, setToken] = useState(() => {
     const response = localStorage.getItem('FreelasApp@token');
     if (response) {
+      clientApi.defaults.headers = {
+        authorization: `Bearer ${JSON.parse(response)}`,
+      };
       return JSON.parse(response);
     }
-    return {} as UserProps;
+    return undefined;
   });
 
   const login = async ({ email, password }: LoginRequest) => {
@@ -47,6 +50,10 @@ const AuthProvider: React.FC = ({ children }) => {
     setUser(response.data.user);
     setToken(response.data.token);
 
+    clientApi.defaults.headers = {
+      authorization: `Bearer ${response.data.token}`,
+    };
+
     localStorage.setItem('FreelasApp@user', JSON.stringify(response.data.user));
     localStorage.setItem(
       'FreelasApp@token',
@@ -57,7 +64,7 @@ const AuthProvider: React.FC = ({ children }) => {
   const logout = async () => {
     localStorage.removeItem('FreelasApp@user');
 
-    setUser({} as UserProps);
+    setUser(undefined);
   };
 
   return (

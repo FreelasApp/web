@@ -16,6 +16,7 @@ const AuthRoutes: React.FC<RouteProps> = ({
   ...rest
 }) => {
   const { user } = useAuthContext();
+
   return (
     <RouteDOM
       {...rest}
@@ -25,7 +26,7 @@ const AuthRoutes: React.FC<RouteProps> = ({
         ) : (
           <Redirect
             to={{
-              pathname: isPrivate ? '/' : '/Dashboard',
+              pathname: isPrivate ? '/' : '/dashboard',
               state: { location },
             }}
           />
