@@ -31,4 +31,8 @@ export default createGlobalStyle`
     border: 0 none;
     outline: 0;
   } 
+
+  p {
+    line-height: 20px;
+  }
 `;

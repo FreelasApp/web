@@ -7,13 +7,14 @@ interface LoginRequest {
 }
 
 interface UserProps {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  avatar_url: string;
+  avatar: string;
 }
 
 interface AuthContextProps {
-  user: UserProps | undefined;
+  user: UserProps;
   token: string | undefined;
   login: (data: LoginRequest) => Promise<void>;
   logout: () => Promise<void>;
@@ -38,7 +39,7 @@ const AuthProvider: React.FC = ({ children }) => {
       };
       return JSON.parse(response);
     }
-    return undefined;
+    return null;
   });
 
   const login = async ({ email, password }: LoginRequest) => {
