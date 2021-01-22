@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { FiSearch } from 'react-icons/fi';
+import React, { useCallback, useEffect, useState } from 'react';
+import { FiPower, FiSearch } from 'react-icons/fi';
+import { useHistory } from 'react-router-dom';
+
 import Logo from '../../assets/logo.png';
 import Project from '../../components/Project';
 import Contact from '../../components/Contact';
@@ -31,7 +33,10 @@ interface ProjectsProps {
 
 const Dashboard: React.FC = () => {
   const [projects, setProjects] = useState<ProjectsProps[]>([]);
-  const { user } = useAuthContext();
+  const { user, logout } = useAuthContext();
+  const [color, setColor] = useState('#fff');
+
+  const history = useHistory();
 
   useEffect(() => {
     clientApi.get<ProjectsProps[]>('/freelas?status=open').then(response => {
@@ -42,24 +47,39 @@ const Dashboard: React.FC = () => {
   return (
     <Container>
       <Header>
-        <img src={Logo} alt="logo" />
         <div>
-          <input type="text" placeholder="Procurar um projeto por categoria" />
-          <FiSearch size={22} color="#7a8af6" />
+          <img src={Logo} alt="logo" />
+          <button
+            id="user"
+            type="button"
+            onClick={() => {
+              history.push('profile');
+            }}
+          >
+            <img src={user.avatar} alt="user avatar" />
+            <strong>{`${user.firstName} ${user.lastName}`}</strong>
+          </button>
         </div>
-        <button
-          id="user"
-          type="button"
-          onClick={() => {
-            //
-          }}
-        >
-          <strong>{`${user.firstName} ${user.lastName}`}</strong>
-          <img
-            src={`http://localhost:3333/files/${user.avatar}`}
-            alt="user avatar"
-          />
-        </button>
+        <div>
+          <div
+            style={{
+              borderWidth: 2,
+              borderStyle: 'solid',
+              borderColor: color,
+            }}
+          >
+            <input
+              type="text"
+              placeholder="Procurar um projeto por categoria"
+              onFocus={() => setColor('#c90fff')}
+              onBlur={() => setColor('#FFF')}
+            />
+            <FiSearch size={22} color="#7a8af6" />
+          </div>
+          <button type="button" onClick={logout}>
+            <FiPower size={28} />
+          </button>
+        </div>
       </Header>
       <Content>
         <Feed>

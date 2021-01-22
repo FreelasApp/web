@@ -14,42 +14,55 @@ export const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  div {
+    display: flex;
+    align-items: center;
+    button {
+      border: 0;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      color: ${shade(0.1, '#fff')};
+      font-weight: 700;
+      margin-left: 15px;
+
+      img {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+      }
+
+      strong {
+        font-size: 18px;
+        margin-left: 10px;
+      }
+    }
+  }
 
   div {
     display: flex;
     align-items: center;
-    width: 350px;
-    height: 40px;
-    background: #fff;
-    padding: 10px;
-    border-radius: 10px;
+    div {
+      display: flex;
+      align-items: center;
+      width: 350px;
+      height: 40px;
+      background: #fff;
+      padding: 10px;
+      border-radius: 10px;
 
-    input {
-      flex: 1;
+      margin-right: 15px;
+      input {
+        flex: 1;
+      }
+
+      svg {
+        margin-left: 10px;
+      }
     }
-
     svg {
-      margin-left: 10px;
-    }
-  }
-
-  button {
-    border: 0;
-    background: transparent;
-    display: flex;
-    align-items: center;
-    color: ${shade(0.1, '#fff')};
-    font-weight: 700;
-    img {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      border: 2px solid #fff;
-    }
-
-    strong {
-      font-size: 18px;
-      margin-right: 10px;
+      color: #fff;
     }
   }
 `;

@@ -1,15 +1,19 @@
 import React from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
+import { useHistory } from 'react-router-dom';
+import { useAuthContext } from '../../Hooks/AuthContext';
 // import Logo from '../../assets/logo.png';
 // import Project from '../../components/Project';
 
 import { Container, Header, FreelaContent } from './styles';
 
 const Freela: React.FC = () => {
+  const { user } = useAuthContext();
+  const history = useHistory();
   return (
     <Container>
       <Header>
-        <button type="button" id="goback">
+        <button type="button" id="goback" onClick={() => history.goBack()}>
           <FiArrowLeft size={28} />
           <p>Voltar</p>
         </button>
@@ -22,10 +26,7 @@ const Freela: React.FC = () => {
           }}
         >
           <strong>Jhonnas Keven</strong>
-          <img
-            src="https://avatars2.githubusercontent.com/u/50251304?s=460&u=f3ac62e5d926b4c8f2a8bc93e548ea7443ff5dbb&v=4"
-            alt="user avatar"
-          />
+          <img src={user.avatar} alt="user avatar" />
         </button>
       </Header>
 
