@@ -20,7 +20,7 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.div`
-  padding: 10px;
+  padding: 10px 30px;
   height: 230px;
   width: 100%;
   background: ${shade(0.3, '#7a8af6')};

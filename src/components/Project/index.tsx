@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
 import { useHistory } from 'react-router-dom';
 import formatValue from '../../utils/formatValue';
+import formatDate from '../../utils/formatDate';
 import { Container, Header, Content, Footer } from './styles';
 
 interface ProjectProps {
@@ -25,11 +26,6 @@ const Project: React.FC<ProjectProps> = ({
   user_name,
   categories,
 }) => {
-  const dateFormated = useMemo(() => {
-    const parseDate = new Date(date);
-    return `${parseDate.getDate()}/${parseDate.getMonth()}/${parseDate.getFullYear()}`;
-  }, [date]);
-
   const history = useHistory();
   const valueFormated = useMemo(() => {
     return formatValue(Number(price));
@@ -66,7 +62,7 @@ const Project: React.FC<ProjectProps> = ({
         <strong>Descrição</strong>
         <p>{description}</p>
         <div>
-          <span>{dateFormated}</span>
+          <span>{formatDate(date)}</span>
           <p>{valueFormated}</p>
         </div>
       </Content>

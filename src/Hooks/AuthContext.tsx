@@ -1,5 +1,6 @@
 import React, { useContext, createContext, useState, useCallback } from 'react';
 import clientApi from '../service/clientApi';
+import formatName from '../utils/formatName';
 
 interface LoginRequest {
   email: string;
@@ -9,14 +10,17 @@ interface LoginRequest {
 interface UserProps {
   firstName: string;
   lastName: string;
+  fullName: string;
   email: string;
   avatar: string;
+  description?: string;
 }
 
 interface AuthContextProps {
   user: UserProps;
   token: string | undefined;
   login: (data: LoginRequest) => Promise<void>;
+  updateUser: (data: UserProps) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -42,17 +46,6 @@ const AuthProvider: React.FC = ({ children }) => {
     return null;
   });
 
-  const handleConvertInTitleWord = useCallback((word: string) => {
-    const charactries = word.split('');
-
-    return charactries.reduce((acumulator, char, index) => {
-      if (index === 0) {
-        return acumulator + char.toUpperCase();
-      }
-      return acumulator + char;
-    }, '');
-  }, []);
-
   const login = async ({ email, password }: LoginRequest) => {
     const response = await clientApi.post<{
       user: UserProps;
@@ -63,12 +56,16 @@ const AuthProvider: React.FC = ({ children }) => {
     });
 
     const userFomated = {
-      firstName: handleConvertInTitleWord(response.data.user.firstName),
-      lastName: handleConvertInTitleWord(response.data.user.lastName),
+      fullName: formatName(
+        response.data.user.firstName,
+        response.data.user.lastName,
+      ),
+      firstName: response.data.user.firstName,
+      lastName: response.data.user.lastName,
       email: response.data.user.email,
       avatar: response.data.user.avatar
         ? `http://localhost:3333/files/${response.data.user.avatar}`
-        : 'https://image.freepik.com/vetores-gratis/ilustracao-de-personagem-cavalheiro-bonito_24877-60133.jpg',
+        : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw7i7gVDMhGLjyGKix9PTsTlY1wsjH4BIC2g&usqp=CAU',
     };
 
     setUser(userFomated);
@@ -78,15 +75,30 @@ const AuthProvider: React.FC = ({ children }) => {
       authorization: `Bearer ${response.data.token}`,
     };
 
-    localStorage.setItem('FreelasApp@user', JSON.stringify(response.data.user));
+    localStorage.setItem('FreelasApp@user', JSON.stringify(userFomated));
     localStorage.setItem(
       'FreelasApp@token',
       JSON.stringify(response.data.token),
     );
   };
 
+  const updateUser = useCallback(async (data: UserProps) => {
+    const userFomated = {
+      fullName: formatName(data.firstName, data.lastName),
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      avatar: data.avatar
+        ? `http://localhost:3333/files/${data.avatar}`
+        : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw7i7gVDMhGLjyGKix9PTsTlY1wsjH4BIC2g&usqp=CAU',
+    };
+
+    setUser(userFomated);
+    localStorage.setItem('FreelasApp@user', JSON.stringify(userFomated));
+  }, []);
   const logout = async () => {
     localStorage.removeItem('FreelasApp@user');
+    localStorage.removeItem('FreelasApp@token');
 
     setUser(undefined);
   };
@@ -97,6 +109,7 @@ const AuthProvider: React.FC = ({ children }) => {
         user,
         token,
         login,
+        updateUser,
         logout,
       }}
     >

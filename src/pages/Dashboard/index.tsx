@@ -57,7 +57,7 @@ const Dashboard: React.FC = () => {
             }}
           >
             <img src={user.avatar} alt="user avatar" />
-            <strong>{`${user.firstName} ${user.lastName}`}</strong>
+            <strong>{user.fullName}</strong>
           </button>
         </div>
         <div>

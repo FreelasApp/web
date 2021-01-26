@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiEdit } from 'react-icons/fi';
 import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '../../Hooks/AuthContext';
 import Project from '../../components/Project';
@@ -16,8 +16,11 @@ const Profile: React.FC = () => {
         </button>
         <div>
           <img src={user.avatar} alt="user avatar" />
-          <strong>{`${user.firstName} ${user.lastName}`}</strong>
+          <strong>{user.fullName}</strong>
         </div>
+        <button type="button" onClick={() => history.push('/profile/edit')}>
+          <FiEdit size={26} />
+        </button>
 
         {/* </div> */}
       </Header>

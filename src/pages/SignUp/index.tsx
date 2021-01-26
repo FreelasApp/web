@@ -116,7 +116,7 @@ const SignUp: React.FC = () => {
           />
           <Input
             type="password"
-            name="passwor"
+            name="password"
             placeholder="Senha"
             icon={FiLock}
             setValue={setPassword}

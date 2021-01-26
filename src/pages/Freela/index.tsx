@@ -1,15 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useAuthContext } from '../../Hooks/AuthContext';
-// import Logo from '../../assets/logo.png';
-// import Project from '../../components/Project';
+import clientApi from '../../service/clientApi';
+import formatName from '../../utils/formatName';
+import formatDate from '../../utils/formatDate';
+import formatValue from '../../utils/formatValue';
 
 import { Container, Header, FreelaContent } from './styles';
 
+interface UseParamsProsp {
+  id: string;
+}
+
+interface ProjectProps {
+  title: string;
+  description: string;
+  price: number;
+  created_at: Date;
+  user: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    avatar: string;
+  };
+  categories: [
+    {
+      name: string;
+      created_at: Date;
+    },
+  ];
+}
 const Freela: React.FC = () => {
+  const [project, setProject] = useState<ProjectProps>({} as ProjectProps);
+
   const { user } = useAuthContext();
   const history = useHistory();
+  const { id } = useParams<UseParamsProsp>();
+
+  useEffect(() => {
+    clientApi.get<ProjectProps>(`freelas/${id}`).then(response => {
+      setProject(response.data);
+    });
+  }, [id]);
+
   return (
     <Container>
       <Header>
@@ -25,49 +59,51 @@ const Freela: React.FC = () => {
             //
           }}
         >
-          <strong>Jhonnas Keven</strong>
+          <strong>{user.fullName}</strong>
           <img src={user.avatar} alt="user avatar" />
         </button>
       </Header>
 
-      <FreelaContent>
-        <button
-          type="button"
-          onClick={() => {
-            //
-          }}
-        >
-          <img
-            src="https://avatars2.githubusercontent.com/u/50251304?s=460&u=f3ac62e5d926b4c8f2a8bc93e548ea7443ff5dbb&v=4"
-            alt="user avatar"
-          />
-          <strong>Iara Caroline</strong>
-        </button>
-        <h1>Create an application</h1>
+      {project.title ? (
+        <>
+          <FreelaContent>
+            <button
+              type="button"
+              onClick={() => {
+                //
+              }}
+            >
+              <img
+                src="https://avatars2.githubusercontent.com/u/50251304?s=460&u=f3ac62e5d926b4c8f2a8bc93e548ea7443ff5dbb&v=4"
+                alt="user avatar"
+              />
+              <strong>
+                {formatName(project.user.firstName, project.user.lastName)}
+              </strong>
+            </button>
+            <h1>{project.title}</h1>
 
-        <p>
-          We are a young startup from Paris looking for a designer who can help
-          us design a tech oriented application. We are open to proposals. You
-          can saw our project here: http://www.zotware.com. We are working with
-          Figma and Photoshop.
-        </p>
+            <p>{project.description}</p>
 
-        <div className="footer">
-          <span>Postado em 30/12/2020</span>
-          <p>R$ 4000,00</p>
-        </div>
+            <div className="footer">
+              <span>{formatDate(project.created_at)}</span>
+              <p>{formatValue(project.price)}</p>
+            </div>
 
-        <div className="categories">
-          <span>UX/UI</span>
-          <span>DESIGN</span>
-          <span>FIGMA</span>
-          <span>PHOTOSHOP</span>
-        </div>
-      </FreelaContent>
+            <div className="categories">
+              {project.categories.map(item => {
+                return <span>{item.name}</span>;
+              })}
+            </div>
+          </FreelaContent>
 
-      <div className="makeProposal">
-        <button type="button">Fazer uma proposta</button>
-      </div>
+          <div className="makeProposal">
+            <button type="button">Fazer uma proposta</button>
+          </div>
+        </>
+      ) : (
+        <h1>Carregando...</h1>
+      )}
     </Container>
   );
 };

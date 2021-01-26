@@ -5,6 +5,7 @@ import SignUp from '../pages/SignUp';
 import Dashboard from '../pages/Dashboard';
 import Freela from '../pages/Freela';
 import Profile from '../pages/Profile';
+import ProfileEdit from '../pages/ProfileEdit';
 import Route from './Route';
 
 const AuthRoutes: React.FC = () => {
@@ -15,6 +16,7 @@ const AuthRoutes: React.FC = () => {
       <Route path="/dashboard" exact isPrivate component={Dashboard} />
       <Route path="/freela/:id" exact isPrivate component={Freela} />
       <Route path="/profile" exact isPrivate component={Profile} />
+      <Route path="/profile/edit" exact isPrivate component={ProfileEdit} />
     </Switch>
   );
 };
