@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FiPower, FiSearch } from 'react-icons/fi';
 import { useHistory } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import Project from '../../components/Project';
 import Contact from '../../components/Contact';
 import clientApi from '../../service/clientApi';
 import { useAuthContext } from '../../Hooks/AuthContext';
+import formatDate from '../../utils/formatDate';
 
 import { Container, Header, Content, Feed, RisingProjects } from './styles';
 
@@ -24,6 +25,7 @@ interface CategorieProps {
 interface ProjectsProps {
   id: string;
   title: string;
+  status: 'open' | 'inprogres' | 'done';
   description: string;
   price: number;
   user: UserProps;
@@ -37,6 +39,23 @@ const Dashboard: React.FC = () => {
   const [color, setColor] = useState('#fff');
 
   const history = useHistory();
+
+  const handleSort = useCallback(
+    (item1: ProjectsProps, item2: ProjectsProps) => {
+      if (item1.price > item2.price) {
+        return 1;
+      }
+      return -1;
+    },
+    [],
+  );
+
+  const risingProjects = useMemo(() => {
+    const projectsSortd = projects.sort(handleSort);
+    return projectsSortd.filter(
+      (item, index) => index < 10 && item.status === 'open',
+    );
+  }, [projects, handleSort]);
 
   useEffect(() => {
     clientApi.get<ProjectsProps[]>('/freelas?status=open').then(response => {
@@ -99,59 +118,21 @@ const Dashboard: React.FC = () => {
           })}
         </Feed>
         <RisingProjects>
-          <button type="button">
-            <div>
-              <strong>Create an API</strong>
-              <text>By</text>
-              <strong>Iara-Caroline</strong>
-            </div>
-            <span>30/10/2021</span>
-          </button>
-
-          <button type="button">
-            <div>
-              <strong>Create an API</strong>
-              <text>By</text>
-              <strong>Iara-Caroline</strong>
-            </div>
-            <span>30/10/2021</span>
-          </button>
-
-          <button type="button">
-            <div>
-              <strong>Create an API</strong>
-              <text>By</text>
-              <strong>Iara-Caroline</strong>
-            </div>
-            <span>30/10/2021</span>
-          </button>
-
-          <button type="button">
-            <div>
-              <strong>Create an API</strong>
-              <text>By</text>
-              <strong>Iara-Caroline</strong>
-            </div>
-            <span>30/10/2021</span>
-          </button>
-
-          <button type="button">
-            <div>
-              <strong>Create an API</strong>
-              <text>By</text>
-              <strong>Iara-Caroline</strong>
-            </div>
-            <span>30/10/2021</span>
-          </button>
-
-          <button type="button">
-            <div>
-              <strong>Create an API</strong>
-              <text>By</text>
-              <strong>Iara-Caroline</strong>
-            </div>
-            <span>30/10/2021</span>
-          </button>
+          {risingProjects.map(project => {
+            return (
+              <button
+                type="button"
+                onClick={() => history.push(`/freela/${project.id}`)}
+              >
+                <p>
+                  <strong>{project.title}</strong>
+                  <text>By</text>
+                  <strong>{`${project.user.firstName} ${project.user.lastName}`}</strong>
+                </p>
+                <span>{formatDate(project.created_at)}</span>
+              </button>
+            );
+          })}
         </RisingProjects>
       </Content>
       <Contact />

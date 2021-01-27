@@ -84,7 +84,7 @@ export const Feed = styled.div`
 export const RisingProjects = styled.div`
   display: flex;
   flex-direction: column;
-
+  max-width: 500px;
   button {
     display: flex;
     flex-direction: column;
