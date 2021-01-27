@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { FiArrowLeft, FiEdit } from 'react-icons/fi';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useAuthContext } from '../../Hooks/AuthContext';
 import Project from '../../components/Project';
 import clientApi from '../../service/clientApi';
@@ -13,11 +13,18 @@ import {
   ProjectList,
 } from './styles';
 
+interface UseParamsProsp {
+  id: string;
+}
+
 interface UserProps {
   firstName: string;
   lastName: string;
-  id: string;
+  fullName: string;
+  email: string;
   avatar: string;
+  description?: string;
+  id: string;
 }
 
 interface CategorieProps {
@@ -36,11 +43,14 @@ interface ProjectsProps {
 }
 
 const Profile: React.FC = () => {
+  const [user, setUser] = useState<UserProps>({} as UserProps);
   const [projects, setProjects] = useState<ProjectsProps[]>([]);
   const [isFocushed, setIsFocushed] = useState(false);
   const [filter, setFilter] = useState('');
 
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
+
+  const { id } = useParams<UseParamsProsp>();
   const history = useHistory();
 
   const projectsLis = useMemo(() => {
@@ -56,10 +66,17 @@ const Profile: React.FC = () => {
   }, [filter, projects]);
 
   useEffect(() => {
-    clientApi.get<ProjectsProps[]>('user/freelas').then(response => {
+    clientApi.get<UserProps>(`profile/${id}`).then(response => {
+      console.log(response.data);
+      setUser(response.data);
+    });
+  }, [id]);
+
+  useEffect(() => {
+    clientApi.get<ProjectsProps[]>(`user/freelas?id=${id}`).then(response => {
       setProjects(response.data);
     });
-  }, []);
+  }, [id]);
 
   return (
     <Container>
@@ -68,12 +85,15 @@ const Profile: React.FC = () => {
           <FiArrowLeft size={28} />
         </button>
         <div>
-          <img src={user.avatar} alt="user avatar" />
-          <strong>{user.fullName}</strong>
+          <img
+            src={`http://localhost:3333/files/${user.avatar}`}
+            alt="user avatar"
+          />
+          <strong>{`${user.firstName} ${user.lastName}`}</strong>
         </div>
-        <button type="button" onClick={() => history.push('/profile/edit')}>
+        {/* <button type="button" onClick={() => history.push('/profile/edit')}>
           <FiEdit size={26} />
-        </button>
+        </button> */}
       </Header>
       <Content>
         <div>
@@ -101,8 +121,8 @@ const Profile: React.FC = () => {
             {projectsLis.map(project => {
               return (
                 <Project
-                  user_id={project.user.id}
                   id={project.id}
+                  user_id={project.user.id}
                   avatar_url={project.user.avatar}
                   date={project.created_at}
                   description={project.description}
@@ -111,7 +131,7 @@ const Profile: React.FC = () => {
                   status={project.status}
                   user_name={`${project.user.firstName} ${project.user.lastName}`}
                   categories={project.categories.map(item => item.name)}
-                  inProfile
+                  // inProfile
                 />
               );
             })}

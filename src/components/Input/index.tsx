@@ -12,7 +12,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   value?: string;
   error?: boolean;
   icon?: React.ComponentType<IconBaseProps>;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  setValue: React.Dispatch<React.SetStateAction<string | number | any>>;
 }
 
 const Input: React.FC<InputProps> = ({

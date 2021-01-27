@@ -2,26 +2,30 @@ import styled from 'styled-components';
 import { shade } from 'polished';
 
 export const Container = styled.div`
-  height: 100vh;
+  /* height: 100vh; */
 
   > div.makeProposal {
+    margin: 0 auto;
     margin-top: 40px;
     width: 100%;
     padding: 30px;
     display: flex;
     justify-content: center;
+    align-items: center;
     margin-bottom: 30px;
-    button {
-      width: 100%;
-      max-width: 300px;
-      height: 40px;
-      border-radius: 10px;
-      background: #efedf0;
-      transition: background 1s;
-      font-weight: bold;
-      &:hover {
-        background: ${shade(0.3, '#efedf0')};
-      }
+    max-width: 300px;
+    height: 40px;
+    background: #fff;
+    transition: background 0.3s;
+    border-radius: 10px;
+    &:hover {
+      background: ${shade(0.3, '#fff')};
+    }
+
+    a {
+      text-decoration: none;
+      color: #120e21;
+      /* text-align: center; */
     }
   }
 `;

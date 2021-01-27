@@ -92,7 +92,7 @@ const ProfileEdit: React.FC = () => {
         });
       }
     }
-  }, [email, firstName, lastName, description, addToast, history]);
+  }, [email, firstName, lastName, description, addToast, history, updateUser]);
   return (
     <Container>
       <Header>

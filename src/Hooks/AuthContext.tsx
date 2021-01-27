@@ -63,6 +63,8 @@ const AuthProvider: React.FC = ({ children }) => {
       firstName: response.data.user.firstName,
       lastName: response.data.user.lastName,
       email: response.data.user.email,
+
+      description: response.data.user.description,
       avatar: response.data.user.avatar
         ? `http://localhost:3333/files/${response.data.user.avatar}`
         : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw7i7gVDMhGLjyGKix9PTsTlY1wsjH4BIC2g&usqp=CAU',
@@ -88,6 +90,7 @@ const AuthProvider: React.FC = ({ children }) => {
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
+      description: data.description,
       avatar: data.avatar
         ? `http://localhost:3333/files/${data.avatar}`
         : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw7i7gVDMhGLjyGKix9PTsTlY1wsjH4BIC2g&usqp=CAU',

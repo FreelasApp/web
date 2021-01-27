@@ -31,6 +31,7 @@ interface ProjectProps {
     },
   ];
 }
+
 const Freela: React.FC = () => {
   const [project, setProject] = useState<ProjectProps>({} as ProjectProps);
 
@@ -98,7 +99,12 @@ const Freela: React.FC = () => {
           </FreelaContent>
 
           <div className="makeProposal">
-            <button type="button">Fazer uma proposta</button>
+            <a
+              href={`https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&source=mailto&to=${project.user.email}`}
+              target="black"
+            >
+              Fazer uma proposta
+            </a>
           </div>
         </>
       ) : (

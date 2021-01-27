@@ -35,7 +35,7 @@ export const Header = styled.div`
 
       strong {
         font-size: 18px;
-        margin-left: 10px;
+        margin-right: 10px;
       }
     }
   }
@@ -52,7 +52,7 @@ export const Header = styled.div`
       padding: 10px;
       border-radius: 10px;
 
-      margin-right: 15px;
+      margin-left: 15px;
       input {
         flex: 1;
       }
